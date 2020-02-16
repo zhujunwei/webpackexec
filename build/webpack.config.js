@@ -1,49 +1,69 @@
-const path = require("path");
-const development = require("./webpack.dev");
-const production = require("./webpack.prod");
+const path = require('path');
 const merge = require('webpack-merge');
-const htmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin")
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssWebpackPlugin = require('mini-css-extract-plugin');
+const production = require('./webpack.prod');
+const development = require('./webpack.dev');
 
 module.exports = (env) => {
   const basicConfig = {
     entry: {
-      main: path.resolve(__dirname, "../src/index.js"),
+      main: path.resolve(__dirname, '../src/index.js'),
       // a: path.resolve(__dirname, "../src/a.js"), // 多文件打包
     },
     output: {
       filename: '[name].js',
-      path: path.resolve(__dirname, "../dist")
+      path: path.resolve(__dirname, '../dist'),
     },
     module: {
       rules: [{
         test: /(\.js)$/,
         exclude: /node_modules/,
         use: {
-          loader: "eslint-loader"
+          loader: 'eslint-loader',
         },
-        enforce: "pre" // 强制在所有js的loader之前执行
+        enforce: 'pre', // 强制在所有js的loader之前执行
       },
       {
         test: /(\.js)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
-        }
-      }]
+          loader: 'babel-loader',
+        },
+      },
+      {
+        test: /(\.css|less)$/,
+        exclude: /node_modules/,
+        use: [
+          env.production && MiniCssWebpackPlugin.loader,
+          !env.production && 'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 2, // import 引入的文件需要调用下面的css来处理来处理
+            },
+          },
+          'postcss-loader',
+          'less-loader',
+        ].filter(Boolean),
+      }],
     },
     plugins: [
+      env.production && new MiniCssWebpackPlugin({
+        filename: 'css/[name].[contentHash].css',
+      }),
       new CleanWebpackPlugin(),
-      new htmlWebpackPlugin({
-        template: path.resolve(__dirname, "../public/index.html"),
-        filename: "index.html",
+      new HtmlWebpackPlugin({
+        template: path.resolve(__dirname, '../public/index.html'),
+        filename: 'index.html',
         hash: true,
-        minify: env.production ? { //压缩
+        minify: env.production ? { // 压缩
           removeAttributeQuotes: true,
-          collapseWhitespace: true
+          collapseWhitespace: true,
         } : false,
-        chunksSortMode: "dependency",
-        chunks: ["main"]
+        chunksSortMode: 'dependency',
+        chunks: ['main'],
       }),
       // new htmlWebpackPlugin({ //多个html 生成多个html文件
       //   template: path.resolve(__dirname, "../public/index.html"),
@@ -56,9 +76,8 @@ module.exports = (env) => {
       //   chunksSortMode: "dependency",
       //   chunks: ["a"]
       // }),
-    ]
-  }
+    ].filter(Boolean),
+  };
 
-  return env.production ? merge(basicConfig, production) : merge(basicConfig, development)
-
-}
+  return env.production ? merge(basicConfig, production) : merge(basicConfig, development);
+};

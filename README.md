@@ -6,6 +6,7 @@
 4. webpack-merge 合并webpack 配置文件
 5. webpack webpack-cli
 6. webpack-dev-server 开发环境服务
+7. mini-css-extract-plugin 抽离css 生成css文件
 
 
 ## loaders 
@@ -58,8 +59,33 @@
     ```
 
 ### 2. eslint-loader
+
   安装 eslint-loader eslint eslint-config-airbnb-base
 
+### 3. css-loader style-loader / node-sass sass-loader / less less-loader
 
+  解析css sass less
 
+### 4. postcss-loader autoprefixer 增加样式前缀
+
+  
+  创建`postcss`的配置文件`postcss.config.js`
+  ```javascript
+  module.exports = {
+      plugins:[
+          require('autoprefixer')
+      ]
+  }
+  ```
+
+### css 压缩
+  optimize-css-assets-webpack-plugin terser-webpack-plugin
+  在`webpack.prod.js`文件中配置压缩
+  ```javascript
+  const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+  const TerserJSPlugin = require('terser-webpack-plugin');
+  optimization:{
+      minimizer:[new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
+  }
+  ```
 

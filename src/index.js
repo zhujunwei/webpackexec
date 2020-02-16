@@ -1,2 +1,6 @@
-let a = 1;
+import './css/index.less';
+
+
+const a = 1;
+
 console.log(a);

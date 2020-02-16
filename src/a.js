@@ -1,1 +1,1 @@
-console.log("!23213")
+console.log('!23213');

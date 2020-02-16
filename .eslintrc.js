@@ -22,5 +22,7 @@ module.exports = {
     'react',
   ],
   rules: {
+    "linebreak-style": [0 ,"error", "windows"], 
+    "no-console":"off"
   },
 };

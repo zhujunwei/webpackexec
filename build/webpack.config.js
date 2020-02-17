@@ -17,40 +17,70 @@ module.exports = (env) => {
       path: path.resolve(__dirname, '../dist'),
     },
     module: {
-      rules: [{
-        test: /(\.js)$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'eslint-loader',
+      rules: [
+        {
+          test: /(\.js)$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'eslint-loader',
+          },
+          enforce: 'pre', // 强制在所有js的loader之前执行
         },
-        enforce: 'pre', // 强制在所有js的loader之前执行
-      },
-      {
-        test: /(\.js)$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
+        {
+          test: /(\.js)$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+          },
         },
-      },
-      {
-        test: /(\.css|less)$/,
-        exclude: /node_modules/,
-        use: [
-          env.production && MiniCssWebpackPlugin.loader,
-          !env.production && 'style-loader',
-          {
-            loader: 'css-loader',
+        {
+          test: /(\.woff|ttf|eot|otf)$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'file-loader',
             options: {
-              importLoaders: 2, // import 引入的文件需要调用下面的css来处理来处理
+              name: 'files/[name].[contenthash].[ext]',
             },
           },
-          'postcss-loader',
-          'less-loader',
-        ].filter(Boolean),
-      }],
+        },
+        {
+          test: /(\.jpg|png|gif|svg)$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'url-loader',
+            options: {
+              name: 'img/[name].[contenthash].[ext]',
+              limit: 40960,
+            },
+          },
+        },
+        {
+          test: /(\.css|less)$/,
+          exclude: /node_modules/,
+          use: [
+            env.production && MiniCssWebpackPlugin.loader,
+            !env.production && 'style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 2, // import 引入的文件需要调用下面的css来处理来处理
+              },
+            },
+            'postcss-loader',
+            'less-loader',
+          ].filter(Boolean),
+        },
+      ],
+    },
+    resolve: {
+      extensions: ['.js', '.json'],
+      alias: {
+        image: path.resolve(__dirname, '../src/assets/image'),
+      },
     },
     plugins: [
-      env.production && new MiniCssWebpackPlugin({
+      env.production
+      && new MiniCssWebpackPlugin({
         filename: 'css/[name].[contentHash].css',
       }),
       new CleanWebpackPlugin(),
@@ -58,10 +88,13 @@ module.exports = (env) => {
         template: path.resolve(__dirname, '../public/index.html'),
         filename: 'index.html',
         hash: true,
-        minify: env.production ? { // 压缩
-          removeAttributeQuotes: true,
-          collapseWhitespace: true,
-        } : false,
+        minify: env.production
+          ? {
+            // 压缩
+            removeAttributeQuotes: true,
+            collapseWhitespace: true,
+          }
+          : false,
         chunksSortMode: 'dependency',
         chunks: ['main'],
       }),
@@ -79,5 +112,7 @@ module.exports = (env) => {
     ].filter(Boolean),
   };
 
-  return env.production ? merge(basicConfig, production) : merge(basicConfig, development);
+  return env.production
+    ? merge(basicConfig, production)
+    : merge(basicConfig, development);
 };

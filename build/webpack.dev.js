@@ -8,5 +8,6 @@ module.exports = {
     port: 3030,
     open: true, // 自动打开
     overlay: true, // 弹出错误提示层
+    hot: true,
   },
 };

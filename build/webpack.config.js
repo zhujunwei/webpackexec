@@ -3,6 +3,7 @@ const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssWebpackPlugin = require('mini-css-extract-plugin');
+const Webpack = require('webpack');
 const production = require('./webpack.prod');
 const development = require('./webpack.dev');
 
@@ -97,6 +98,9 @@ module.exports = (env) => {
           : false,
         chunksSortMode: 'dependency',
         chunks: ['main'],
+      }),
+      new Webpack.ProvidePlugin({
+        _: 'lodash',
       }),
       // new htmlWebpackPlugin({ //多个html 生成多个html文件
       //   template: path.resolve(__dirname, "../public/index.html"),

@@ -1,5 +1,6 @@
 import './css/index.less';
 import MindMap from 'image/mindmap.png';
+// import { cloneDeep } from 'lodash';
 import { minues } from './math';
 
 const img = document.createElement('img');
@@ -18,3 +19,9 @@ image.src = MindMap;
 document.body.append(image);
 
 console.log(minues());
+console.log('env', window.env);
+const obj = {
+  a: { b: 1 },
+};
+// eslint-disable-next-line no-undef
+console.log(_.cloneDeep(obj));

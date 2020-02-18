@@ -1,5 +1,7 @@
+import { cloneDeep } from 'lodash';
+
 export function add(a, b) {
-  return a + b;
+  return cloneDeep(a + b);
 }
 
 export function minues(a, b) {

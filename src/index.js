@@ -1,27 +1,32 @@
-import './css/index.less';
-import MindMap from 'image/mindmap.png';
-// import { cloneDeep } from 'lodash';
-import { minues } from './math';
+import React from "react"
+import { render } from "react-dom";
 
-const img = document.createElement('img');
-img.src = MindMap;
-img.onload = function onload() {
-  document.body.append(img);
-};
+render(<div>1111</div>, document.querySelector("#root"))
 
-const element = document.createElement('div');
-element.innerHTML = 'img icon';
-element.classList.add('hello');
-document.body.append(element);
+// import './css/index.less';
+// import MindMap from 'image/mindmap.png';
+// // import { cloneDeep } from 'lodash';
+// import { minues } from './math';
 
-const image = new Image();
-image.src = MindMap;
-document.body.append(image);
+// const img = document.createElement('img');
+// img.src = MindMap;
+// img.onload = function onload() {
+//   document.body.append(img);
+// };
 
-console.log(minues());
-console.log('env', window.env);
-const obj = {
-  a: { b: 1 },
-};
-// eslint-disable-next-line no-undef
-console.log(_.cloneDeep(obj));
+// const element = document.createElement('div');
+// element.innerHTML = 'img icon';
+// element.classList.add('hello');
+// document.body.append(element);
+
+// const image = new Image();
+// image.src = MindMap;
+// document.body.append(image);
+
+// console.log(minues());
+// console.log('env', window.env);
+// const obj = {
+//   a: { b: 1 },
+// };
+// // eslint-disable-next-line no-undef
+// console.log(_.cloneDeep(obj));

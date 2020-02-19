@@ -3,7 +3,6 @@ const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssWebpackPlugin = require('mini-css-extract-plugin');
-const AddAssetHtmlWebpackPlugin = require("add-asset-html-webpack-plugin");
 const Webpack = require('webpack');
 const production = require('./webpack.prod');
 const development = require('./webpack.dev');
@@ -102,30 +101,7 @@ module.exports = (env) => {
       }),
       new Webpack.ProvidePlugin({
         _: 'lodash',
-      }),
-      new AddAssetHtmlWebpackPlugin({
-        filepath: path.resolve(__dirname, '../dll/_dll_react.js')
-      }),
-      new AddAssetHtmlWebpackPlugin({
-        filepath: path.resolve(__dirname, '../dll/_dll_reactdom.js')
-      }),
-      new Webpack.DllReferencePlugin({
-        manifest: path.resolve(__dirname, "../dll", "react.manifest.json")
-      }),
-      new Webpack.DllReferencePlugin({
-        manifest: path.resolve(__dirname, "../dll", "reactdom.manifest.json")
       })
-      // new htmlWebpackPlugin({ //多个html 生成多个html文件
-      //   template: path.resolve(__dirname, "../public/index.html"),
-      //   filename: "index_a.html",
-      //   hash: true,
-      //   minify: env.production ? { //压缩
-      //     removeAttributeQuotes: true,
-      //     collapseWhitespace: true
-      //   } : false,
-      //   chunksSortMode: "dependency",
-      //   chunks: ["a"]
-      // }),
     ].filter(Boolean),
   };
 

@@ -1,4 +1,6 @@
 const path = require('path');
+const AddAssetHtmlWebpackPlugin = require("add-asset-html-webpack-plugin");
+const Webpack = require('webpack');
 
 module.exports = {
   mode: 'development',
@@ -11,4 +13,18 @@ module.exports = {
     overlay: true, // 弹出错误提示层
     hot: true,
   },
+  plugins: [
+    new AddAssetHtmlWebpackPlugin({
+      filepath: path.resolve(__dirname, '../dll/_dll_react.js')
+    }),
+    new AddAssetHtmlWebpackPlugin({
+      filepath: path.resolve(__dirname, '../dll/_dll_reactdom.js')
+    }),
+    new Webpack.DllReferencePlugin({
+      manifest: path.resolve(__dirname, "../dll", "react.manifest.json")
+    }),
+    new Webpack.DllReferencePlugin({
+      manifest: path.resolve(__dirname, "../dll", "reactdom.manifest.json")
+    })
+  ]
 };

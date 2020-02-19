@@ -3,6 +3,7 @@ const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssWebpackPlugin = require('mini-css-extract-plugin');
+const AddAssetHtmlWebpackPlugin = require("add-asset-html-webpack-plugin");
 const Webpack = require('webpack');
 const production = require('./webpack.prod');
 const development = require('./webpack.dev');
@@ -21,7 +22,7 @@ module.exports = (env) => {
       rules: [
         {
           test: /(\.js)$/,
-          exclude: /node_modules/,
+          include: path.resolve('src'),
           use: {
             loader: 'eslint-loader',
           },
@@ -74,7 +75,7 @@ module.exports = (env) => {
       ],
     },
     resolve: {
-      extensions: ['.js', '.json'],
+      extensions: ['.js', '.json', ".css"],
       alias: {
         image: path.resolve(__dirname, '../src/assets/image'),
       },
@@ -102,6 +103,18 @@ module.exports = (env) => {
       new Webpack.ProvidePlugin({
         _: 'lodash',
       }),
+      new AddAssetHtmlWebpackPlugin({
+        filepath: path.resolve(__dirname, '../dll/_dll_react.js')
+      }),
+      new AddAssetHtmlWebpackPlugin({
+        filepath: path.resolve(__dirname, '../dll/_dll_reactdom.js')
+      }),
+      new Webpack.DllReferencePlugin({
+        manifest: path.resolve(__dirname, "../dll", "react.manifest.json")
+      }),
+      new Webpack.DllReferencePlugin({
+        manifest: path.resolve(__dirname, "../dll", "reactdom.manifest.json")
+      })
       // new htmlWebpackPlugin({ //多个html 生成多个html文件
       //   template: path.resolve(__dirname, "../public/index.html"),
       //   filename: "index_a.html",
